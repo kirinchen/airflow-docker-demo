@@ -1,10 +1,15 @@
+import sys
 import os
+# Recursively add all subdirectories under `/opt/airflow/dags` to the path
+for root, dirs, files in os.walk('/opt/airflow/dags'):
+    sys.path.append(root)
 import time
 import logging
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy_operator import DummyOperator
+from test_dag import test_utils
 
 
 def check_weekday(date_stamp):
@@ -17,10 +22,12 @@ def check_weekday(date_stamp):
 
 
 def get_metadata():
+    test_utils.hi()
     logging.info('get_metadata'+'~'*30+'!!!')
 
 
 def clean_data():
+    test_utils.hi()
     logging.info('clean_data'+'~'*30+'!!!')
 
 
@@ -32,7 +39,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
-with DAG(dag_id='tutorial_kirin', default_args=default_args) as dag:
+with DAG(dag_id='tutorial_kirin_12', default_args=default_args) as dag:
 
     tw_stock_start = DummyOperator(
         task_id='tw_stock_start'
